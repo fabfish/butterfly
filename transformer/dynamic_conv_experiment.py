@@ -26,9 +26,10 @@ from ray.tune import Trainable, Experiment as RayExperiment, sample_from, grid_s
 from ray.tune.schedulers import AsyncHyperBandScheduler
 
 # Fairseq scripts
-from train import train_translation
-from generate import generate_translation
+# from train import train_translation
+# from generate import generate_translation
 from average_checkpoints import main as avg_checkpoints
+# from onmt.utils import average_checkpoints as avg_checkpoints
 
 
 def evaluate_translation(gen_args):
@@ -161,6 +162,7 @@ if slack_config_path.exists():
 @ex.config
 def default_config():
     model = 'DynamicConv'  # Name of model, either 'DynamicConv' or 'Transformer'
+    # model = 'Transformer'
     model_args = {}  # Arguments to be passed to the model, as a dictionary
     encoder = ['D'] * (7 if model == 'DynamicConv' else 6)  # Layers in the encoder
     decoder = ['D'] * 6  # Layers in the decoder
@@ -216,12 +218,14 @@ def dynamic_conv_experiment(model, model_args, encoder, decoder, structure_lr_mu
 def run(model, encoder, decoder, result_dir):
     experiment = dynamic_conv_experiment()
     try:
-        with open('../config/redis_address', 'r') as f:
-            address = f.read().strip()
-            ray.init(redis_address=address)
+        # with open('../config/redis_address', 'r') as f:
+        #     address = f.read().strip()
+        #     ray.init(redis_address=address)
+        ray.init()
     except:
         ray.init()
-    trials = ray.tune.run(experiment, raise_on_failed_trial=False, queue_trials=True).trials
+    # trials = ray.tune.run(experiment, raise_on_failed_trial=False, queue_trials=True).trials
+    trials = ray.tune.run(experiment, raise_on_failed_trial=False).trials
     trials = [trial for trial in trials if trial.last_result is not None]
     bleu = [(trial.last_result.get('ensemble_bleu_valid', float('-inf')),
              trial.last_result.get('ensemble_bleu_test', float('-inf'))) for trial in trials]

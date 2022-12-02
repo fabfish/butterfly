@@ -233,7 +233,8 @@ def cifar10_experiment(dataset, model, args, optimizer, use_hyperband, lr, lr_de
     smoke_str = 'smoke_' if smoke_test else '' # for easy finding and deleting unimportant logs
     args_str = '_'.join([k+':'+str(v) for k,v in args.items()])
     timestamp = datetime.datetime.now().replace(microsecond=0).isoformat()
-    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    # commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('gbk')
     experiment = RayExperiment(
         name=f'{smoke_str}{dataset.lower()}_{model}_{args_str}_{optimizer}_epochs_{nmaxepochs}_{timestamp}_{commit_id}',
         run=TrainableModel,

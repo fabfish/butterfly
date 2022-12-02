@@ -232,7 +232,8 @@ def transform_experiment(model, target, size, complex, param, lr_min, lr_max, nt
         'device': 'cuda' if cuda else 'cpu',
      }
     b_args = '_'.join([k+':'+str(v) for k,v in b.items()])
-    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    # commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('gbk')
     experiment = RayExperiment(
         # name=f'{commit_id}_{target}_factorization_{model}_{complex}_{size}_{param}',
         name=f'{size}_{target}_{model}_{b_args}_c{complex}_{commit_id}',

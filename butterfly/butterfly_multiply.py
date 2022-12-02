@@ -3,8 +3,9 @@ import math
 import torch
 from torch import nn
 import torch.nn.functional as F
+import factor_multiply_fast as fmf
 
-from .complex_utils import complex_mul
+from complex_utils import complex_mul
 
 use_extension = True
 try:

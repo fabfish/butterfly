@@ -44,24 +44,24 @@ class ButterflyTest(unittest.TestCase):
                                     self.assertTrue(np.allclose(twiddle_norm, 1),
                                                     (twiddle_norm, device, (in_size, out_size), complex, init))
 
-    def test_fft_init(self):
-        batch_size = 10
-        n = 16
-        input = torch.randn(batch_size, n, dtype=torch.complex64)
-        br = torch_butterfly.permutation.bitreversal_permutation(n, pytorch_format=True)
-        for increasing_stride in [True, False]:
-            for nblocks in [1, 2, 3]:
-                with torch.no_grad():
-                    out_torch = torch.fft.fft(input, norm='ortho')
-                    b = Butterfly(n, n, False, complex=True, increasing_stride=increasing_stride,
-                                init='fft_no_br', nblocks=nblocks)
-                    out = b(input[..., br]) if increasing_stride else b(input)[..., br]
-                    self.assertTrue(torch.allclose(out, out_torch, self.rtol, self.atol))
-                    out_torch = torch.fft.ifft(input, norm='ortho')
-                    b = Butterfly(n, n, False, complex=True, increasing_stride=increasing_stride,
-                                init='ifft_no_br', nblocks=nblocks)
-                    out = b(input[..., br]) if increasing_stride else b(input)[..., br]
-                    self.assertTrue(torch.allclose(out, out_torch, self.rtol, self.atol))
+    # def test_fft_init(self):
+    #     batch_size = 10
+    #     n = 16
+    #     input = torch.randn(batch_size, n, dtype=torch.complex64)
+    #     br = torch_butterfly.permutation.bitreversal_permutation(n, pytorch_format=True)
+    #     for increasing_stride in [True, False]:
+    #         for nblocks in [1, 2, 3]:
+    #             with torch.no_grad():
+    #                 out_torch = torch.fft.fft(input, norm='ortho')
+    #                 b = Butterfly(n, n, False, complex=True, increasing_stride=increasing_stride,
+    #                             init='fft_no_br', nblocks=nblocks)
+    #                 out = b(input[..., br]) if increasing_stride else b(input)[..., br]
+    #                 self.assertTrue(torch.allclose(out, out_torch, self.rtol, self.atol))
+    #                 out_torch = torch.fft.ifft(input, norm='ortho')
+    #                 b = Butterfly(n, n, False, complex=True, increasing_stride=increasing_stride,
+    #                             init='ifft_no_br', nblocks=nblocks)
+    #                 out = b(input[..., br]) if increasing_stride else b(input)[..., br]
+    #                 self.assertTrue(torch.allclose(out, out_torch, self.rtol, self.atol))
 
     def test_fft2d_init(self):
         batch_size = 10

@@ -370,7 +370,8 @@ def cifar10_experiment(dataset, model, args, optimizer, nmaxepochs, lr_decay, lr
         'restore_perm': restore_perm,
      }
     timestamp = datetime.datetime.now().replace(microsecond=0).isoformat()
-    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    # commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('utf-8')
+    commit_id = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip().decode('gbk')
     stopping_criteria = {"training_iteration": 1 if smoke_test else nmaxepochs}
     if unsupervised: # TODO group all the unsupervised casework together
         stopping_criteria.update({'model_ent': 200, 'neg_ent': -5.0})
